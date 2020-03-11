@@ -76,7 +76,10 @@ def load_tf_weights_in_xxx(model, config, tf_checkpoint_path):
         name = name.split("/")
         # adam_v and adam_m are variables used in AdamWeightDecayOptimizer to calculated m and v
         # which are not required for using pretrained model
-        if any(n in ["adam_v", "adam_m", "global_step"] for n in name):
+        if any(
+            n in ["adam_v", "adam_m", "AdamWeightDecayOptimizer", "AdamWeightDecayOptimizer_1", "global_step"]
+            for n in name
+        ):
             logger.info("Skipping {}".format("/".join(name)))
             continue
         pointer = model
@@ -138,7 +141,7 @@ XxxOutput = nn.Module
 
 class XxxLayer(nn.Module):
     def __init__(self, config):
-        super(XxxLayer, self).__init__()
+        super().__init__()
         self.attention = XxxAttention(config)
         self.intermediate = XxxIntermediate(config)
         self.output = XxxOutput(config)
@@ -173,7 +176,7 @@ XxxPooler = nn.Module
 
 class XxxPreTrainedModel(PreTrainedModel):
     """ An abstract class to handle weights initialization and
-        a simple interface for dowloading and loading pretrained models.
+        a simple interface for downloading and loading pretrained models.
     """
 
     config_class = XxxConfig
@@ -298,7 +301,7 @@ class XxxModel(XxxPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(XxxModel, self).__init__(config)
+        super().__init__(config)
 
         self.embeddings = XxxEmbeddings(config)
         self.encoder = XxxEncoder(config)
@@ -426,7 +429,7 @@ class XxxForMaskedLM(XxxPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(XxxForMaskedLM, self).__init__(config)
+        super().__init__(config)
 
         self.transformer = XxxModel(config)
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size)
@@ -507,7 +510,7 @@ class XxxForSequenceClassification(XxxPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(XxxForSequenceClassification, self).__init__(config)
+        super().__init__(config)
         self.num_labels = config.num_labels
 
         self.transformer = XxxModel(config)
@@ -593,7 +596,7 @@ class XxxForTokenClassification(XxxPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(XxxForTokenClassification, self).__init__(config)
+        super().__init__(config)
         self.num_labels = config.num_labels
 
         self.transformer = XxxModel(config)
@@ -692,7 +695,7 @@ class XxxForQuestionAnswering(XxxPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(XxxForQuestionAnswering, self).__init__(config)
+        super().__init__(config)
         self.num_labels = config.num_labels
 
         self.transformer = XxxModel(config)

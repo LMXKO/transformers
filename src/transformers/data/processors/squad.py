@@ -123,7 +123,7 @@ def squad_convert_example_to_features(example, max_seq_length, doc_stride, max_q
     truncated_query = tokenizer.encode(example.question_text, add_special_tokens=False, max_length=max_query_length)
     sequence_added_tokens = (
         tokenizer.max_len - tokenizer.max_len_single_sentence + 1
-        if "roberta" in str(type(tokenizer))
+        if "roberta" in str(type(tokenizer)) or "camembert" in str(type(tokenizer))
         else tokenizer.max_len - tokenizer.max_len_single_sentence
     )
     sequence_pair_added_tokens = tokenizer.max_len - tokenizer.max_len_sentences_pair
@@ -147,7 +147,14 @@ def squad_convert_example_to_features(example, max_seq_length, doc_stride, max_q
         )
 
         if tokenizer.pad_token_id in encoded_dict["input_ids"]:
-            non_padded_ids = encoded_dict["input_ids"][: encoded_dict["input_ids"].index(tokenizer.pad_token_id)]
+            if tokenizer.padding_side == "right":
+                non_padded_ids = encoded_dict["input_ids"][: encoded_dict["input_ids"].index(tokenizer.pad_token_id)]
+            else:
+                last_padding_id_position = (
+                    len(encoded_dict["input_ids"]) - 1 - encoded_dict["input_ids"][::-1].index(tokenizer.pad_token_id)
+                )
+                non_padded_ids = encoded_dict["input_ids"][last_padding_id_position + 1 :]
+
         else:
             non_padded_ids = encoded_dict["input_ids"]
 
@@ -242,6 +249,7 @@ def squad_convert_example_to_features(example, max_seq_length, doc_stride, max_q
                 token_to_orig_map=span["token_to_orig_map"],
                 start_position=start_position,
                 end_position=end_position,
+                is_impossible=span_is_impossible,
             )
         )
     return features
@@ -332,6 +340,7 @@ def squad_convert_examples_to_features(
         all_token_type_ids = torch.tensor([f.token_type_ids for f in features], dtype=torch.long)
         all_cls_index = torch.tensor([f.cls_index for f in features], dtype=torch.long)
         all_p_mask = torch.tensor([f.p_mask for f in features], dtype=torch.float)
+        all_is_impossible = torch.tensor([f.is_impossible for f in features], dtype=torch.float)
 
         if not is_training:
             all_example_index = torch.arange(all_input_ids.size(0), dtype=torch.long)
@@ -349,6 +358,7 @@ def squad_convert_examples_to_features(
                 all_end_positions,
                 all_cls_index,
                 all_p_mask,
+                all_is_impossible,
             )
 
         return features, dataset
@@ -369,6 +379,7 @@ def squad_convert_examples_to_features(
                         "end_position": ex.end_position,
                         "cls_index": ex.cls_index,
                         "p_mask": ex.p_mask,
+                        "is_impossible": ex.is_impossible,
                     },
                 )
 
@@ -376,7 +387,13 @@ def squad_convert_examples_to_features(
             gen,
             (
                 {"input_ids": tf.int32, "attention_mask": tf.int32, "token_type_ids": tf.int32},
-                {"start_position": tf.int64, "end_position": tf.int64, "cls_index": tf.int64, "p_mask": tf.int32},
+                {
+                    "start_position": tf.int64,
+                    "end_position": tf.int64,
+                    "cls_index": tf.int64,
+                    "p_mask": tf.int32,
+                    "is_impossible": tf.int32,
+                },
             ),
             (
                 {
@@ -389,6 +406,7 @@ def squad_convert_examples_to_features(
                     "end_position": tf.TensorShape([]),
                     "cls_index": tf.TensorShape([]),
                     "p_mask": tf.TensorShape([None]),
+                    "is_impossible": tf.TensorShape([]),
                 },
             ),
         )
@@ -610,7 +628,7 @@ class SquadExample(object):
         self.doc_tokens = doc_tokens
         self.char_to_word_offset = char_to_word_offset
 
-        # Start end end positions only has a value during evaluation.
+        # Start and end positions only has a value during evaluation.
         if start_position_character is not None and not is_impossible:
             self.start_position = char_to_word_offset[start_position_character]
             self.end_position = char_to_word_offset[
@@ -658,6 +676,7 @@ class SquadFeatures(object):
         token_to_orig_map,
         start_position,
         end_position,
+        is_impossible,
     ):
         self.input_ids = input_ids
         self.attention_mask = attention_mask
@@ -674,6 +693,7 @@ class SquadFeatures(object):
 
         self.start_position = start_position
         self.end_position = end_position
+        self.is_impossible = is_impossible
 
 
 class SquadResult(object):

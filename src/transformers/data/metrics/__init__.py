@@ -19,7 +19,7 @@ try:
     from sklearn.metrics import matthews_corrcoef, f1_score
 
     _has_sklearn = True
-except (AttributeError, ImportError) as e:
+except (AttributeError, ImportError):
     _has_sklearn = False
 
 
@@ -71,6 +71,8 @@ if _has_sklearn:
         elif task_name == "rte":
             return {"acc": simple_accuracy(preds, labels)}
         elif task_name == "wnli":
+            return {"acc": simple_accuracy(preds, labels)}
+        elif task_name == "hans":
             return {"acc": simple_accuracy(preds, labels)}
         else:
             raise KeyError(task_name)

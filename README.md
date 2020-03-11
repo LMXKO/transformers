@@ -24,6 +24,8 @@
 
 🤗 Transformers (formerly known as `pytorch-transformers` and `pytorch-pretrained-bert`) provides state-of-the-art general-purpose architectures (BERT, GPT-2, RoBERTa, XLM, DistilBert, XLNet, CTRL...) for Natural Language Understanding (NLU) and Natural Language Generation (NLG) with over 32+ pretrained models in 100+ languages and deep interoperability between TensorFlow 2.0 and PyTorch.
 
+[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/0)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/0)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/1)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/1)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/2)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/2)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/3)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/3)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/4)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/4)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/5)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/5)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/6)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/6)[![](https://sourcerer.io/fame/clmnt/huggingface/transformers/images/7)](https://sourcerer.io/fame/clmnt/huggingface/transformers/links/7)
+
 ### Features
 
 - As easy to use as pytorch-transformers
@@ -60,11 +62,17 @@ Choose the right framework for every part of a model's lifetime
 | [Quick tour: Share your models ](#Quick-tour-of-model-sharing) | Upload and share your fine-tuned models with the community |
 | [Migrating from pytorch-transformers to transformers](#Migrating-from-pytorch-transformers-to-transformers) | Migrating your code from pytorch-transformers to transformers |
 | [Migrating from pytorch-pretrained-bert to pytorch-transformers](#Migrating-from-pytorch-pretrained-bert-to-transformers) | Migrating your code from pytorch-pretrained-bert to transformers |
-| [Documentation][(v2.3.0)](https://huggingface.co/transformers/v2.3.0)[(v2.2.0/v2.2.1/v2.2.2)](https://huggingface.co/transformers/v2.2.0) [(v2.1.1)](https://huggingface.co/transformers/v2.1.1) [(v2.0.0)](https://huggingface.co/transformers/v2.0.0) [(v1.2.0)](https://huggingface.co/transformers/v1.2.0) [(v1.1.0)](https://huggingface.co/transformers/v1.1.0) [(v1.0.0)](https://huggingface.co/transformers/v1.0.0) [(master)](https://huggingface.co/transformers) | Full API documentation and more |
+| [Documentation][(v2.5.0)](https://huggingface.co/transformers/v2.5.0)[(v2.4.0/v2.4.1)](https://huggingface.co/transformers/v2.4.0)[(v2.3.0)](https://huggingface.co/transformers/v2.3.0)[(v2.2.0/v2.2.1/v2.2.2)](https://huggingface.co/transformers/v2.2.0) [(v2.1.1)](https://huggingface.co/transformers/v2.1.1) [(v2.0.0)](https://huggingface.co/transformers/v2.0.0) [(v1.2.0)](https://huggingface.co/transformers/v1.2.0) [(v1.1.0)](https://huggingface.co/transformers/v1.1.0) [(v1.0.0)](https://huggingface.co/transformers/v1.0.0) [(master)](https://huggingface.co/transformers) | Full API documentation and more |
 
 ## Installation
 
 This repo is tested on Python 3.5+, PyTorch 1.0.0+ and TensorFlow 2.0.0-rc1
+
+You should install 🤗 Transformers in a [virtual environment](https://docs.python.org/3/library/venv.html). If you're unfamiliar with Python virtual environments, check out the [user guide](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+
+Create a virtual environment with the version of Python you're going to use and activate it.
+
+Now, if you want to use 🤗 Transformers, you can install it with pip. If you'd like to play with the examples, you must install it from source.
 
 ### With pip
 
@@ -85,43 +93,48 @@ Please refer to [TensorFlow installation page](https://www.tensorflow.org/instal
 When TensorFlow 2.0 and/or PyTorch has been installed, you can install from source by cloning the repository and running:
 
 ```bash
-pip install [--editable] .
+git clone https://github.com/huggingface/transformers
+cd transformers
+pip install .
+```
+
+When you update the repository, you should upgrade the transformers installation and its dependencies as follows:
+
+```bash
+git pull
+pip install --upgrade .
 ```
 
 ### Run the examples
 
 Examples are included in the repository but are not shipped with the library.
-Therefore, in order to run the latest versions of the examples you also need to install from source. To do so, create a new virtual environment and follow these steps:
 
-```bash
-git clone https://github.com/huggingface/transformers
-cd transformers
-pip install [--editable] .
-```
+Therefore, in order to run the latest versions of the examples, you need to install from source, as described above.
+
+Look at the [README](https://github.com/huggingface/transformers/blob/master/examples/README.md) for how to run examples.
 
 ### Tests
 
-A series of tests are included for the library and the example scripts. Library tests can be found in the [tests folder](https://github.com/huggingface/transformers/tree/master/tests) and examples tests in the [examples folder](https://github.com/huggingface/transformers/tree/master/examples).
-
-These tests can be run using `unittest` or `pytest` (install pytest if needed with `pip install pytest`).
+A series of tests are included for the library and for some example scripts. Library tests can be found in the [tests folder](https://github.com/huggingface/transformers/tree/master/tests) and examples tests in the [examples folder](https://github.com/huggingface/transformers/tree/master/examples).
 
 Depending on which framework is installed (TensorFlow 2.0 and/or PyTorch), the irrelevant tests will be skipped. Ensure that both frameworks are installed if you want to execute all tests.
 
-You can run the tests from the root of the cloned repository with the commands:
+Here's the easiest way to run tests for the library:
 
 ```bash
-python -m unittest discover -s tests -t . -v
-python -m unittest discover -s examples -t examples -v
+pip install -e ".[testing]"
+make test
 ```
 
-or
+and for the examples:
 
 ```bash
-python -m pytest -sv ./tests/
-python -m pytest -sv ./examples/
+pip install -e ".[testing]"
+pip install -r examples/requirements.txt
+make test-examples
 ```
 
-By default, slow tests are skipped. Set the `RUN_SLOW` environment variable to `yes` to run them.
+For details, refer to the [contributing guide](https://github.com/huggingface/transformers/blob/master/CONTRIBUTING.md#tests).
 
 ### Do you want to run a Transformer model on a mobile device?
 
@@ -149,7 +162,9 @@ At some point in the future, you'll be able to seamlessly move from pre-training
 12. **[T5](https://github.com/google-research/text-to-text-transfer-transformer)** (from Google AI) released with the paper [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683) by Colin Raffel and Noam Shazeer and Adam Roberts and Katherine Lee and Sharan Narang and Michael Matena and Yanqi Zhou and Wei Li and Peter J. Liu.
 13. **[XLM-RoBERTa](https://github.com/pytorch/fairseq/tree/master/examples/xlmr)** (from Facebook AI), released together with the paper [Unsupervised Cross-lingual Representation Learning at Scale](https://arxiv.org/abs/1911.02116) by Alexis Conneau*, Kartikay Khandelwal*, Naman Goyal, Vishrav Chaudhary, Guillaume Wenzek, Francisco Guzmán, Edouard Grave, Myle Ott, Luke Zettlemoyer and Veselin Stoyanov.
 14. **[MMBT](https://github.com/facebookresearch/mmbt/)** (from Facebook), released together with the paper a [Supervised Multimodal Bitransformers for Classifying Images and Text](https://arxiv.org/pdf/1909.02950.pdf) by Douwe Kiela, Suvrat Bhooshan, Hamed Firooz, Davide Testuggine.
-15. Want to contribute a new model? We have added a **detailed guide and templates** to guide you in the process of adding a new model. You can find them in the [`templates`](./templates) folder of the repository. Be sure to check the [contributing guidelines](./CONTRIBUTING.md) and contact the maintainers or open an issue to collect feedbacks before starting your PR.
+15. **[FlauBERT](https://github.com/getalp/Flaubert)** (from CNRS) released with the paper [FlauBERT: Unsupervised Language Model Pre-training for French](https://arxiv.org/abs/1912.05372) by Hang Le, Loïc Vial, Jibril Frej, Vincent Segonne, Maximin Coavoux, Benjamin Lecouteux, Alexandre Allauzen, Benoît Crabbé, Laurent Besacier, Didier Schwab.
+16. **[Other community models](https://huggingface.co/models)**, contributed by the [community](https://huggingface.co/users).
+17. Want to contribute a new model? We have added a **detailed guide and templates** to guide you in the process of adding a new model. You can find them in the [`templates`](./templates) folder of the repository. Be sure to check the [contributing guidelines](./CONTRIBUTING.md) and contact the maintainers or open an issue to collect feedbacks before starting your PR.
 
 These implementations have been tested on several datasets (see the example scripts) and should match the performances of the original implementations (e.g. ~93 F1 on SQuAD for BERT Whole-Word-Masking, ~88 F1 on RocStories for OpenAI GPT, ~18.3 perplexity on WikiText 103 for Transformer-XL, ~0.916 Peason R coefficient on STS-B for XLNet). You can find more details on the performances in the Examples section of the [documentation](https://huggingface.co/transformers/examples.html).
 
@@ -180,7 +195,7 @@ MODELS = [(BertModel,       BertTokenizer,       'bert-base-uncased'),
           (TransfoXLModel,  TransfoXLTokenizer,  'transfo-xl-wt103'),
           (XLNetModel,      XLNetTokenizer,      'xlnet-base-cased'),
           (XLMModel,        XLMTokenizer,        'xlm-mlm-enfr-1024'),
-          (DistilBertModel, DistilBertTokenizer, 'distilbert-base-uncased'),
+          (DistilBertModel, DistilBertTokenizer, 'distilbert-base-cased'),
           (RobertaModel,    RobertaTokenizer,    'roberta-base'),
           (XLMRobertaModel, XLMRobertaTokenizer, 'xlm-roberta-base'),
          ]
@@ -454,9 +469,9 @@ python ./examples/run_generation.py \
 
 ## Quick tour of model sharing
 
-New in `v2.2.2`: you can now upload and share your fine-tuned models with the community, using the <abbr title="Command-line interface">CLI</abbr> that's built-in to the library.
+Starting with `v2.2.2`, you can now upload and share your fine-tuned models with the community, using the <abbr title="Command-line interface">CLI</abbr> that's built-in to the library.
 
-**First, create an account on [https://huggingface.co/join](https://huggingface.co/join)**. Then:
+**First, create an account on [https://huggingface.co/join](https://huggingface.co/join)**. Optionally, join an existing organization or create a new one. Then:
 
 ```shell
 transformers-cli login
@@ -475,21 +490,37 @@ transformers-cli upload ./config.json [--filename folder/foobar.json]
 # (you can optionally override its filename, which can be nested inside a folder)
 ```
 
-Your model will then be accessible through its identifier, a concatenation of your username and the folder name above:
-```python
-"username/model_name"
+If you want your model to be namespaced by your organization name rather than your username, add the following flag to any command:
+```shell
+--organization organization_name
 ```
+
+Your model will then be accessible through its identifier, a concatenation of your username (or organization name) and the folder name above:
+```python
+"username/pretrained_model"
+# or if an org:
+"organization_name/pretrained_model"
+```
+
+**Please add a README.md model card** to the repo under `model_cards/` with: model description, training params (dataset, preprocessing, hardware used, hyperparameters), evaluation results, intended uses & limitations, etc.
+
+Your model now has a page on huggingface.co/models 🔥
 
 Anyone can load it from code:
 ```python
-tokenizer = AutoTokenizer.from_pretrained("username/pretrained_model")
-model = AutoModel.from_pretrained("username/pretrained_model")
+tokenizer = AutoTokenizer.from_pretrained("namespace/pretrained_model")
+model = AutoModel.from_pretrained("namespace/pretrained_model")
 ```
 
-Finally, list all your files on S3:
+List all your files on S3:
 ```shell
-transformers-cli ls
-# List all your S3 objects.
+transformers-cli s3 ls
+```
+
+You can also delete unneeded files:
+
+```shell
+transformers-cli s3 rm …
 ```
 
 ## Quick tour of pipelines
@@ -502,8 +533,9 @@ You can create `Pipeline` objects for the following down-stream tasks:
  - `feature-extraction`: Generates a tensor representation for the input sequence
  - `ner`: Generates named entity mapping for each word in the input sequence.
  - `sentiment-analysis`: Gives the polarity (positive / negative) of the whole input sequence.
- - `question-answering`: Provided some context and a question refering to the context, it will extract the answer to the question
- in the context.
+ - `text-classification`: Initialize a `TextClassificationPipeline` directly, or see `sentiment-analysis` for an example.
+ - `question-answering`: Provided some context and a question refering to the context, it will extract the answer to the question in the context.
+ - `fill-mask`: Takes an input sequence containing a masked token (e.g. `<mask>`) and return list of most probable filled sequences, with their probabilities.
 
 ```python
 from transformers import pipeline
@@ -653,7 +685,7 @@ for batch in train_data:
 ## Citation
 
 We now have a paper you can cite for the 🤗 Transformers library:
-```
+```bibtex
 @article{Wolf2019HuggingFacesTS,
   title={HuggingFace's Transformers: State-of-the-art Natural Language Processing},
   author={Thomas Wolf and Lysandre Debut and Victor Sanh and Julien Chaumond and Clement Delangue and Anthony Moi and Pierric Cistac and Tim Rault and R'emi Louf and Morgan Funtowicz and Jamie Brew},
